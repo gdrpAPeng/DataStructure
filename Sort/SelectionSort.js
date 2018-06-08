@@ -25,5 +25,5 @@
      }
      return arr;
  }
- let arr = [9,3,5,2,8,6];
+ let arr = [49,38,65,97,76,13,27,49,55,04];
  console.log(selectionSort(arr));
