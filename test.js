@@ -1,118 +1,37 @@
-// const goods = [{
-//     "pid": "1321",
-//     "money": "28",
-//     "s_money": "",
-//     "j_money": "100-20"
-// }, {
-//     "pid": "1322",
-//     "money": "58",
-//     "s_money": "",
-//     "j_money": "100-20"
-// }, {
-//     "pid": "1324",
-//     "money": "18",
-//     "s_money": "",
-//     "j_money": "100-20"
-// }, {
-//     "pid": "1351",
-//     "money": "18.88",
-//     "s_money": "",
-//     "j_money": "100-20"
-// }, {
-//     "pid": "1333",
-//     "money": "28",
-//     "s_money": "18",
-//     "j_money": ""
-// }, {
-//     "pid": "1332",
-//     "money": "28",
-//     "s_money": "18.8",
-//     "j_money": ""
-// }, {
-//     "pid": "1366",
-//     "money": "28",
-//     "s_money": "",
-//     "j_money": "100-20,200-45"
-// }, {
-//     "pid": "1367",
-//     "money": "68",
-//     "s_money": "",
-//     "j_money": "100-20,200-45"
-// }, {
-//     "pid": "1368",
-//     "money": "98",
-//     "s_money": "",
-//     "j_money": "100-20,200-45"
-// }, {
-//     "pid": "1369",
-//     "money": "28.88",
-//     "s_money": "",
-//     "j_money": "100-20,200-45"
-// }
-// ]
 
+// 根据商品对应的满减规则，算出最少的总价
+// 例 商品数据
 /**
- * 分类：
- *      只满足一种满减规则(简称 - 仅一)
- *          满足金额 => 不管了
- *          不满足 => 多种满减规则里有无符合此满减规则的商品，补不足
- *      多种满减规则
- *          存在与 仅一 匹配的 => 移除該滿減規則 => 递归
- *          不存在与 仅一 匹配的 => 
+ * money -- 原价
+ * s_money -- 特价，存在特价的一律按特价计算
+ * j_money -- 满减规则， 多个规则用','隔开， 200-50 表示满 200 减 50
  */
-
-
-
-
-
-
-// let reduceRules = {}
-// let total = 0
-
-// goods.forEach(item => {
-//     if(item.j_money && !item.s_money) {
-//         item.j_money.split(',').forEach(inItem => {
-//             if(!reduceRules[inItem]) {
-//                 reduceRules[inItem] = []
-//             }
-//             //  将数据丢到对应满减规则里
-//             //  如果对应多种规则，在多种规则里都会存在一个商品数据
-//             item.isOk = false   //  判断是否已经算进去总价了
-//             reduceRules[inItem].push(item)  
-//         })
-//     } else {
-//         // 原价商品和特价商品
-//         total = total + Number(item.s_money? item.s_money: item.money);
-//     }
-// });
-// console.log(total)
-// let tempMoney = 0;
-// let max, min;
-// Object.keys(reduceRules).forEach(key => {
-//     tempMoney = 0
-//     reduceRules[key].forEach(item => {
-//         if(!item.isOk) {
-//             tempMoney += Number(item.money)
-//         }
-//     })
-//     // 判断是否满足 满减金额
-//     max = Number(key.split('-')[0])
-//     min = Number(key.split('-')[1])
-//     console.log(tempMoney, max, min)
-//     if(tempMoney > max) {
-//         tempMoney -= min;
-//         // 满足满减--那就标记一下
-//         reduceRules[key].forEach(item => {
-//             item.isOk = true
-//         })
-//     }
-//     console.log(tempMoney)
-//     total += tempMoney
-// })
-
-// console.log(reduceRules);
-// console.log(total);
-
+const goods = [
+    {
+        pid: '001',
+        money: 50,
+        s_money: '',
+        j_money: '200-50'
+    },
+    {
+        pid: '002',
+        money: 20,
+        s_money: '',
+        j_money: '200-50,100-20'
+    },
+    {
+        pid: '003',
+        money: 50,
+        s_money: '',
+        j_money: '200-50,100-20'
+    },
+    {
+        pid: '003',
+        money: 50,
+        s_money: '',
+        j_money: '100-20'
+    },
+]
 
 const getMinPrice = (goods) => {
     let total = 0
@@ -240,34 +159,130 @@ const getMinPrice = (goods) => {
 }
 
 
-const goods = [
-    {
-        pid: '001',
-        money: 50,
-        s_money: '',
-        j_money: '200-50'
-    },
-    {
-        pid: '002',
-        money: 20,
-        s_money: '',
-        j_money: '200-50,100-20'
-    },
-    {
-        pid: '003',
-        money: 50,
-        s_money: '',
-        j_money: '200-50,100-20'
-    },
-    {
-        pid: '003',
-        money: 50,
-        s_money: '',
-        j_money: '100-20'
-    },
-]
+
 console.log(getMinPrice(goods))
 
 
 // 满减规则 排序 要 优化
-// 当全部商品累加后不符合满减规则时，多条满减规则的商品，不参与计算
+
+
+
+
+
+
+// const goods = [{
+//     "pid": "1321",
+//     "money": "28",
+//     "s_money": "",
+//     "j_money": "100-20"
+// }, {
+//     "pid": "1322",
+//     "money": "58",
+//     "s_money": "",
+//     "j_money": "100-20"
+// }, {
+//     "pid": "1324",
+//     "money": "18",
+//     "s_money": "",
+//     "j_money": "100-20"
+// }, {
+//     "pid": "1351",
+//     "money": "18.88",
+//     "s_money": "",
+//     "j_money": "100-20"
+// }, {
+//     "pid": "1333",
+//     "money": "28",
+//     "s_money": "18",
+//     "j_money": ""
+// }, {
+//     "pid": "1332",
+//     "money": "28",
+//     "s_money": "18.8",
+//     "j_money": ""
+// }, {
+//     "pid": "1366",
+//     "money": "28",
+//     "s_money": "",
+//     "j_money": "100-20,200-45"
+// }, {
+//     "pid": "1367",
+//     "money": "68",
+//     "s_money": "",
+//     "j_money": "100-20,200-45"
+// }, {
+//     "pid": "1368",
+//     "money": "98",
+//     "s_money": "",
+//     "j_money": "100-20,200-45"
+// }, {
+//     "pid": "1369",
+//     "money": "28.88",
+//     "s_money": "",
+//     "j_money": "100-20,200-45"
+// }
+// ]
+
+/**
+ * 分类：
+ *      只满足一种满减规则(简称 - 仅一)
+ *          满足金额 => 不管了
+ *          不满足 => 多种满减规则里有无符合此满减规则的商品，补不足
+ *      多种满减规则
+ *          存在与 仅一 匹配的 => 移除該滿減規則 => 递归
+ *          不存在与 仅一 匹配的 => 
+ */
+
+
+
+
+
+
+// let reduceRules = {}
+// let total = 0
+
+// goods.forEach(item => {
+//     if(item.j_money && !item.s_money) {
+//         item.j_money.split(',').forEach(inItem => {
+//             if(!reduceRules[inItem]) {
+//                 reduceRules[inItem] = []
+//             }
+//             //  将数据丢到对应满减规则里
+//             //  如果对应多种规则，在多种规则里都会存在一个商品数据
+//             item.isOk = false   //  判断是否已经算进去总价了
+//             reduceRules[inItem].push(item)  
+//         })
+//     } else {
+//         // 原价商品和特价商品
+//         total = total + Number(item.s_money? item.s_money: item.money);
+//     }
+// });
+// console.log(total)
+// let tempMoney = 0;
+// let max, min;
+// Object.keys(reduceRules).forEach(key => {
+//     tempMoney = 0
+//     reduceRules[key].forEach(item => {
+//         if(!item.isOk) {
+//             tempMoney += Number(item.money)
+//         }
+//     })
+//     // 判断是否满足 满减金额
+//     max = Number(key.split('-')[0])
+//     min = Number(key.split('-')[1])
+//     console.log(tempMoney, max, min)
+//     if(tempMoney > max) {
+//         tempMoney -= min;
+//         // 满足满减--那就标记一下
+//         reduceRules[key].forEach(item => {
+//             item.isOk = true
+//         })
+//     }
+//     console.log(tempMoney)
+//     total += tempMoney
+// })
+
+// console.log(reduceRules);
+// console.log(total);
+
+
