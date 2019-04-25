@@ -187,6 +187,10 @@ const getMinPrice = (goods) => {
         // 遍历当前满减规则里的商品数据
         // 用 some 是为了随时跳出循环
         item.some((inItem, inIndex) => {
+            // 標記 出現多種規則數據的位置
+            if(inItem.j_money.split(',').length > 1 && tempIndex == -1) {
+                tempIndex = inIndex
+            }
             // 未满足金额, 或者只符合当前计算规则, 则继续计算
             if(tempNumber < ruleMax || inItem.j_money.split(',').length <= 1) {
                 // 此商品未参与计算，则累加
@@ -195,7 +199,7 @@ const getMinPrice = (goods) => {
                     tempNumber += parseFloat(inItem.money)
                 }
             } else {
-                tempIndex = inIndex //  如果要优化，可能会用到
+                // tempIndex = inIndex //  如果要优化，可能会用到
                 return true
             }
         })
@@ -204,6 +208,14 @@ const getMinPrice = (goods) => {
         if(tempNumber >= ruleMax) {
             total += (tempNumber - ruleMin)
         } else {
+            // 如果不滿足，乾脆把多種規則的數據都抛給下個規則計算
+            // 這裏重置
+            if(tempIndex != -1) {
+                for(let i = tempIndex; i < item.length; i++) {
+                    item[i].isOK = false // 重置為 未計算 狀態
+                    tempNumber -= parseFloat(item[i].money)
+                }
+            }
             total += tempNumber
         }
     })
@@ -223,7 +235,7 @@ const getMinPrice = (goods) => {
 
     console.log(extraTotal)
     console.log('================待计算的金额')
-
+    console.log(total, nomalTotal, extraTotal)
     return total + nomalTotal + extraTotal
 }
 
@@ -233,19 +245,29 @@ const goods = [
         pid: '001',
         money: 50,
         s_money: '',
-        j_money: '100-10'
+        j_money: '200-50'
     },
     {
         pid: '002',
         money: 20,
         s_money: '',
-        j_money: '100-10'
+        j_money: '200-50,100-20'
     },
     {
         pid: '003',
         money: 50,
         s_money: '',
-        j_money: '100-10,200-10'
+        j_money: '200-50,100-20'
+    },
+    {
+        pid: '003',
+        money: 50,
+        s_money: '',
+        j_money: '100-20'
     },
 ]
 console.log(getMinPrice(goods))
+
+
+// 满减规则 排序 要 优化
+// 当全部商品累加后不符合满减规则时，多条满减规则的商品，不参与计算
