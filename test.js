@@ -26,7 +26,7 @@ const goods = [
         j_money: '200-50,100-20'
     },
     {
-        pid: '003',
+        pid: '004',
         money: 50,
         s_money: '',
         j_money: '100-20'
